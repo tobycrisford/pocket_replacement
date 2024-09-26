@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Bookmark Saver",
-  "version": "1.1",
-  "description": "Save webpage links for future reading with cross-device sync and favorites",
+  "version": "1.2",
+  "description": "Save webpage links for future reading with cross-device sync, favorites, and full-page view",
   "permissions": ["storage", "tabs"],
   "action": {
     "default_popup": "popup.html"

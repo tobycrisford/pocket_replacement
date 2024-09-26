@@ -1,77 +1,16 @@
-let mainBookmarks = [];
-let favoriteBookmarks = [];
-
-function loadBookmarks() {
-  chrome.storage.sync.get(['mainBookmarks', 'favoriteBookmarks'], function(result) {
-    mainBookmarks = result.mainBookmarks || [];
-    favoriteBookmarks = result.favoriteBookmarks || [];
-    displayBookmarks();
-  });
-}
-
-function saveBookmarks() {
-  chrome.storage.sync.set({
-    mainBookmarks: mainBookmarks,
-    favoriteBookmarks: favoriteBookmarks
-  }, function() {
-    console.log('Bookmarks saved and synced');
-  });
-}
-
-function addBookmark(url, title) {
-  mainBookmarks.push({url: url, title: title, date: new Date().toISOString()});
-  saveBookmarks();
-  displayBookmarks();
-}
-
-function deleteBookmark(list, index) {
-  list.splice(index, 1);
-  saveBookmarks();
-  displayBookmarks();
-}
-
-function favoriteBookmark(index) {
-  const bookmark = mainBookmarks.splice(index, 1)[0];
-  favoriteBookmarks.push(bookmark);
-  saveBookmarks();
-  displayBookmarks();
-}
-
-function displayBookmarks() {
-  displayBookmarkList('mainBookmarkList', mainBookmarks, true);
-  displayBookmarkList('favoriteBookmarkList', favoriteBookmarks, false);
-}
-
-function displayBookmarkList(elementId, bookmarks, showFavoriteButton) {
-  let bookmarkList = document.getElementById(elementId);
-  bookmarkList.innerHTML = '';
-  bookmarks.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach((bookmark, index) => {
-    let bookmarkDiv = document.createElement('div');
-    bookmarkDiv.className = 'bookmark';
-    bookmarkDiv.innerHTML = `
-      <a href="${bookmark.url}" target="_blank">${bookmark.title}</a>
-      <span>(${new Date(bookmark.date).toLocaleString()})</span>
-      <button class="actionBtn deleteBtn" data-list="${elementId}" data-index="${index}">Delete</button>
-      ${showFavoriteButton ? `<button class="actionBtn favoriteBtn" data-index="${index}">Favorite</button>` : ''}
-    `;
-    bookmarkList.appendChild(bookmarkDiv);
-  });
-}
-
 document.getElementById('saveButton').addEventListener('click', function() {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    addBookmark(tabs[0].url, tabs[0].title);
+    chrome.runtime.sendMessage({
+      action: "saveBookmark",
+      url: tabs[0].url,
+      title: tabs[0].title
+    }, function(response) {
+      document.getElementById('message').textContent = response.message;
+    });
   });
 });
 
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('deleteBtn')) {
-    const list = e.target.getAttribute('data-list') === 'mainBookmarkList' ? mainBookmarks : favoriteBookmarks;
-    deleteBookmark(list, parseInt(e.target.getAttribute('data-index')));
-  } else if (e.target.classList.contains('favoriteBtn')) {
-    favoriteBookmark(parseInt(e.target.getAttribute('data-index')));
-  }
+document.getElementById('viewBookmarksButton').addEventListener('click', function() {
+  chrome.tabs.create({url: 'bookmarks.html'});
 });
-
-loadBookmarks();
 
