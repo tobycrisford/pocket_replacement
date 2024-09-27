@@ -1,21 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Saved Bookmarks</title>
-  <style>
-    body { width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; }
-    .bookmarkList { margin-top: 20px; }
-    .bookmark { margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-    .actionBtn { margin-left: 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Saved Bookmarks</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f5f7fa;
+            --card-background: #ffffff;
+            --text-color: #34495e;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .bookmarkList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .bookmark {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bookmark:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+
+        .bookmark a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .bookmark span {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+
+        .actionBtn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 5px 5px 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .actionBtn:hover {
+            background-color: #2980b9;
+        }
+
+        .actionBtn.favoriteBtn {
+            background-color: var(--secondary-color);
+        }
+
+        .actionBtn.favoriteBtn:hover {
+            background-color: #27ae60;
+        }
+
+        @media (max-width: 600px) {
+            .bookmarkList {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>My Saved Bookmarks</h1>
-  <h2>Main Bookmarks</h2>
-  <div id="mainBookmarkList" class="bookmarkList"></div>
-  <h2>Favorite Bookmarks</h2>
-  <div id="favoriteBookmarkList" class="bookmarkList"></div>
-  <script src="bookmarks.js"></script>
+    <div class="container">
+        <h1>My Saved Bookmarks</h1>
+        
+        <h2>Favorite Bookmarks</h2>
+        <div id="favoriteBookmarkList" class="bookmarkList"></div>
+        
+        <h2>Main Bookmarks</h2>
+        <div id="mainBookmarkList" class="bookmarkList"></div>
+    </div>
+
+    <script src="bookmarks.js"></script>
 </body>
 </html>
-
